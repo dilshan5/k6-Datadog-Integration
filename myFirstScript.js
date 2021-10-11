@@ -47,9 +47,13 @@ let params = {
 let targetResponseTimeTrend = new Trend('target_response_time');
 let requestProcessingTimeTrend = new Trend('request_processing_time');
 let responseProcessingTimeTrend = new Trend('response_processing_time');
-let forwardProxyToPlatformLatencyTrend = new Trend('forwardProxy_to_Apigee_time');
-let plaformToforwardProxyLatencyTrend = new Trend('apigee_to_forwardProxy_time');
+let forwardProxyToPlatformLatencyTrend = new Trend('forwardProxy_to_Platform_time');
+let plaformToforwardProxyLatencyTrend = new Trend('platform_to_forwardProxy_time');
 let backendServerProcessingLatencyTrend = new Trend('backend_server_processing_time');
+let plaformToReverseProxyLatencyTrend = new Trend('plaformToReverseProxyLatency');
+let reverseProxyToBackendLatencyTrend = new Trend('reverseProxyToBackendLatency');
+let backendToReverseProxyLatencyTrend = new Trend('backendToReverseProxyLatency');
+let reverseProxyToPlatformLatencyTrend = new Trend('reverseProxyToPlatformLatency');
 
 export default function () {
     let res = http.get('https://www.google.com', params, { timeout: "100s" });
@@ -58,6 +62,10 @@ export default function () {
     let requestProcessingTime = 0;
     let responseProcessingTime = 0;
     let forwardProxyToPlatformLatency = 0;
+    let plaformToReverseProxyLatency = 0;
+    let reverseProxyToBackendLatency = 0;
+    let backendToReverseProxyLatency = 0;
+    let reverseProxyToPlatformLatency = 0;
     let plaformToForwardProxyLatency = 0;
     let backendInTime = 0;
     let backendOutTime = 0;
@@ -69,6 +77,11 @@ export default function () {
     responseProcessingTime = res.headers["Responseprocessingtime"];
     forwardProxyToPlatformLatency = res.headers["ForwardProxyToPlatformLatency"];
     plaformToForwardProxyLatency = res.headers["PlaformToforwardProxyLatency"];
+
+    plaformToReverseProxyLatency = res.headers["PlaformToReverseProxyLatency"];
+    reverseProxyToBackendLatency = res.headers["ReverseProxyToBackendLatency"];
+    backendToReverseProxyLatency = res.headers["BackendToReverseProxyLatency"];
+    reverseProxyToPlatformLatency = res.headers["ReverseProxyToPlatformLatency"];
 
     //calculate the backend processing time  
     backendInTime = res.headers["Be-In-Time"];
@@ -101,6 +114,10 @@ export default function () {
     forwardProxyToPlatformLatencyTrend.add(Math.abs(forwardProxyToPlatformLatency));
     plaformToforwardProxyLatencyTrend.add(Math.abs(plaformToForwardProxyLatency));
     backendServerProcessingLatencyTrend.add(Math.abs(backendServerProcessingLatency));
+    plaformToReverseProxyLatencyTrend.add(Math.abs(plaformToReverseProxyLatency));
+    reverseProxyToBackendLatencyTrend.add(Math.abs(reverseProxyToBackendLatency));
+    backendToReverseProxyLatencyTrend.add(Math.abs(backendToReverseProxyLatency));
+    reverseProxyToPlatformLatencyTrend.add(Math.abs(reverseProxyToPlatformLatency));
 
 
     // add a check to validate your response
